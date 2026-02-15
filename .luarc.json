@@ -1,0 +1,15 @@
+{
+  "hint.enable": true,
+  "workspace.checkThirdParty": "Apply",
+  "workspace.userThirdParty": [
+        "~/.local/share/lua-language-server/addons/"
+    ],
+  "workspace.library": [ 
+        "~/.local/share/lua-language-server/addons/lua-d-premake5/library",
+      ] ,
+      
+"diagnostics.disable": [
+        "undefined-global" 
+  ],
+
+}

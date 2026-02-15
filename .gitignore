@@ -1,0 +1,13 @@
+# Build
+.cache/
+bin/
+obj/
+Makefile
+*.make
+compile_commands.json
+
+# log
+*.log
+vgcore.*
+
+ext/ref
