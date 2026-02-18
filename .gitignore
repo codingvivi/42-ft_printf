@@ -4,6 +4,7 @@ bin/
 obj/
 Makefile
 *.make
+.copier-answers.yml
 compile_commands.json
 
 # log
