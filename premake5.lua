@@ -28,21 +28,21 @@ project "42-ft_printf"
 
     -- Update paths to the new subdirectory
     files {
-        "src/turnin/**.c",
-        "src/turnin/**.h"
+        "src/*.c",
+        "src/*.h"
     }
 
     -- so the library itself can find its own header
     includedirs { "src" }
 
-project "test_runner"
-    kind "ConsoleApp"
-    language "C"
+-- project "test_runner"
+--     kind "ConsoleApp"
+--     language "C"
 
-    files { "tests/main.c" }
+--     files { "tests/main.c" }
 
-    -- allows main.c to use #include "get_next_line.h"
-    includedirs { "src" }
-    links { "42-ft_printf" }
+--     -- allows main.c to use #include "get_next_line.h"
+--     includedirs { "src" }
+--     links { "42-ft_printf" }
 
 
