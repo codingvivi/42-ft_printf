@@ -1,5 +1,5 @@
 build-deps *dep-args:
-    rsync -av --include-from='.dist-include' --exclude='*' vendor/libft/ libft/
+    rsync -av --include-from='.dist-include' --exclude='*' ext/lib/libft/ libft/
     make -f libft/Makefile  {{dep-args}}
 
 build-printf *pf-args:
@@ -17,10 +17,11 @@ dist:
     rsync -av --include-from='.dist-include' --exclude='*' . dist/ 
 
 fclean:
+    make -f libft/Makefile fclean
     rm -rf libft/
     rm -rf obj/
     rm -rf bin/
 
 fre *dep-args *pf-args:
     fclean
-    build-full *dep-args *pf-args:
+    build-full {{dep-args}} {{pf-args}}

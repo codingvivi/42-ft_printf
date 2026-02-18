@@ -1,5 +1,5 @@
-[submodule "vendor/libft"]
-	path = vendor/libft
+[submodule "ext/lib/libft"]
+	path = ext/lib/libft
 	url = https://github.com/codingvivi/42_libft
 [submodule "ext/tools/premake-ecc"]
 	path = ext/tools/premake-ecc
