@@ -5,8 +5,6 @@ workspace "42-ft_printf Workspace"
     platforms { "Dev", "42" }
     toolset "clang"
 
-    --defines {  "BUFFER_SIZE=1" }
-
     buildoptions {"-Wall", "-Werror", "-Wextra"}
 
     filter "platforms:Dev"
@@ -29,7 +27,8 @@ project "42-ft_printf"
     -- Update paths to the new subdirectory
     files {
         "src/*.c",
-        "src/*.h"
+        "src/*.h",
+        "libft/libft.a"
     }
 
     -- so the library itself can find its own header

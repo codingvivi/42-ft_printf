@@ -7,7 +7,7 @@ build-printf *pf-args:
     premake5 gmake
     make {{pf-args}}
 
-build-full *dep-args *pf-alibftrgs:
+build-full dep-args="" pf-args="":
     build-deps {{dep-args}}
     build-printf {{pf-args}}
 
@@ -26,6 +26,6 @@ fclean:
     rm -rf obj/
     rm -rf bin/
 
-fre *dep-args *pf-args:
+fre dep-args="" pf-args="":
     fclean
     build-full {{dep-args}} {{pf-args}}
