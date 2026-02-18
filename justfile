@@ -1,7 +1,7 @@
 build-deps *dep-args:
     @echo "Building libft"
     rsync -av --include-from='.dist-include' --exclude='*' ext/lib/libft/ libft/
-    make -f libft/Makefile  {{dep-args}}
+    make -C libft {{dep-args}}
 
 build-printf *pf-args:
     premake5 gmake

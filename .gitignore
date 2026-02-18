@@ -2,6 +2,7 @@
 .cache/
 bin/
 obj/
+libft/
 Makefile
 *.make
 .copier-answers.yml
