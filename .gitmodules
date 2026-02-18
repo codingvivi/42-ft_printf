@@ -1,12 +1,9 @@
 [submodule "ext/lib/libft"]
 	path = ext/lib/libft
 	url = https://github.com/codingvivi/42_libft
-[submodule "ext/tools/premake-ecc"]
-	path = ext/tools/premake-ecc
+[submodule "ext/tool/premake-ecc"]
+	path = ext/tool/premake-ecc
 	url = https://github.com/MattBystrin/premake-ecc.git
 [submodule "ext/test/francinette"]
 	path = ext/test/francinette
 	url = https://github.com/Prashant-Bharaj/francinette
-[submodule "ext/test/premake-ecc"]
-	path = ext/test/premake-ecc
-	url = https://github.com/MattBystrin/premake-ecc.git
