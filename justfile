@@ -1,21 +1,28 @@
+build-full dep-args="" pf-args="":
+    just build-deps {{dep-args}}
+    just build-printf {{pf-args}}
+
+build-printf *pf-args:
+    just setup-printf
+    make {{pf-args}}
+
 build-deps *dep-args:
     @echo "Building libft"
+    mkdir -pv libft/
     rsync -av --include-from='.dist-include' --exclude='*' ext/lib/libft/ libft/
     make -C libft {{dep-args}}
 
-build-printf *pf-args:
+setup-printf:
     premake5 gmake
-    make {{pf-args}}
-
-build-full dep-args="" pf-args="":
-    build-deps {{dep-args}}
-    build-printf {{pf-args}}
+    premake5 ecc
 
 dist:
     @echo "Copying libft-files"
+    mkdir -pv dist/libft
     rsync -av --include-from='.dist-include' --exclude='*' libft/ dist/libft
-    rm -rf dist/libft/README.md
+    rm -rfv dist/libft/README.md
     @echo "Copying src files for ft_printf"
+    mkdir -pv dist/src
     rsync -av --include-from='.dist-include' --exclude='*' src/ dist/src
     @echo "Copying Makefile and README for ft_printf"
     rsync -av --include-from='.dist-include' --exclude='*' . dist/ 

@@ -1,4 +1,4 @@
-require "ext/build/premake-ecc/ecc"
+require "ext/tool/premake-ecc/ecc"
 
 workspace "42-ft_printf Workspace"
     configurations {"Release", "Debug"}
@@ -28,11 +28,11 @@ project "42-ft_printf"
     files {
         "src/*.c",
         "src/*.h",
-        "libft/libft.a"
+        "libft/libft.h"
     }
 
     -- so the library itself can find its own header
-    includedirs { "src" }
+    includedirs { "src", "libft" }
 
 -- project "test_runner"
 --     kind "ConsoleApp"
