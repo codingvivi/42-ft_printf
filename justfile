@@ -9,7 +9,7 @@ build-printf *pf-args:
 build-deps *dep-args:
     @echo "Building libft"
     mkdir -pv libft/
-    rsync -av --include-from='.dist-include' --exclude='*' ext/lib/libft/ libft/
+    rsync -av --exclude='*' --include-from='.dist-include' ext/lib/libft/ libft/
     make -C libft {{dep-args}}
 
 setup-printf:
@@ -19,13 +19,13 @@ setup-printf:
 dist:
     @echo "Copying libft-files"
     mkdir -pv dist/libft
-    rsync -av --include-from='.dist-include' --exclude='*' libft/ dist/libft
+    rsync -av --exclude='*' --include-from='.dist-include' libft/ dist/libft
     rm -rfv dist/libft/README.md
     @echo "Copying src files for ft_printf"
     mkdir -pv dist/src
-    rsync -av --include-from='.dist-include' --exclude='*' src/ dist/src
+    rsync -av --exclude='*' --include-from='.dist-include' src/ dist/src
     @echo "Copying Makefile and README for ft_printf"
-    rsync -av --include-from='.dist-include' --exclude='*' . dist/ 
+    rsync -av --exclude='*' --include-from='.dist-include' . dist/ 
 
 fclean:
     make -f libft/Makefile fclean
