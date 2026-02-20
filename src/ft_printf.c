@@ -6,19 +6,14 @@
 /*   By: lrain <lrain@students.42berlin.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 05:14:10 by lrain             #+#    #+#             */
-/*   Updated: 2026/02/19 19:29:46 by lrain            ###   ########.fr       */
+/*   Updated: 2026/02/20 18:27:39 by lrain            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdarg.h>
-#include <stdint.h>
 #include <unistd.h>
+#include "ft_pf_internal.h"
 
-int			ft_pf_putchar_fd(char c, int fd);
-int			ft_pf_putstr_fd(char *str, int fd);
-int			ft_pf_putptr_fd(void *ptr, int fd);
-int			ft_pf_putnbr_base_fd(int nb, char *base_digits, int fd);
-int			ft_pf_putnbru_base_fd(uint64_t nb, int fd, char *base_digits);
 static int	printf_write(char c, va_list *ap);
 
 int	ft_printf(const char *str, ...)

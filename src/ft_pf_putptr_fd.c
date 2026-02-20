@@ -10,11 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdint.h>
 #include <unistd.h>
-
-int	ft_pf_putstr_fd(char *s, int fd);
-int	ft_pf_putnbru_base_fd(uint64_t nb, int fd, char *base);
+#include "ft_pf_internal.h"
 
 int	ft_pf_putptr_fd(void *ptr, int fd)
 {

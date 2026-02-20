@@ -36,6 +36,7 @@ Run `make [target]`. Available targets:
 | `clean`  | Remove object files                  |
 | `fclean` | Remove object files and the library  |
 | `re`     | Full rebuild (`fclean` + `all`)      |
+
 ### Developing
 While this is relevant for pretty much me only,
 since I am the sole person wanting to create a distributable
@@ -54,6 +55,7 @@ If installed, run `just [recipe]`. Available recipes:
 | `build-release` | Cleans `dist/`, runs `build-dist`, then compresses the result into a `.tar.gz` |
 | `fclean`        | Runs `make fclean` and removes `dist/` and the release archive           |
 | `re`            | Runs `fclean`, rebuilds the library, then runs `build-dist`              |
+
 ## Algorithm
 ### Format string parsing
 `ft_printf` scans the format string linearly,

@@ -10,11 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdint.h>
 #include <unistd.h>
+#include "ft_pf_internal.h"
 
 static int	itoa_fwd_fd(uint64_t nb, int fd, char *b_digi, unsigned int base);
-int			ft_pf_putnbru_base_fd(uint64_t nb, int fd, char *base_digits);
 
 int	ft_pf_putnbr_base_fd(int nb, char *base_digits, int fd)
 {

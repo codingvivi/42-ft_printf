@@ -4,10 +4,9 @@ NAME = libftprintf.a
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fPIE
 
 AR = ar -rcs
-LFLAGS = -fPIE
 
 RM = rm -rf
 
