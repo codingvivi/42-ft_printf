@@ -1,38 +1,58 @@
-build-full dep-args="" pf-args="":
-    just build-deps {{dep-args}}
-    just build-printf {{pf-args}}
+release-name := "lrain-42-ft_printf"
+release-tar-gz := release-name + ".tar.gz"
 
-build-printf *pf-args:
-    just setup-printf
-    make {{pf-args}}
+reset  := '\033[0m'
+bold   := '\033[1m'
+blue   := '\033[34m'
+green  := '\033[92m'
+yellow := '\033[33m'
 
-build-deps *dep-args:
-    @echo "Building libft"
-    mkdir -pv libft/
-    rsync -av --exclude='*' --include-from='.dist-include' ext/lib/libft/ libft/
-    make -C libft {{dep-args}}
+_header name:
+    @printf "\n{{bold}}{{blue}}=== {{name}} ===\n{{reset}}"
 
-setup-printf:
-    premake5 gmake
-    premake5 ecc
+_step desc:
+    @printf "{{yellow}}-> {{desc}}...{{reset}}\n"
 
-dist:
-    @echo "Copying libft-files"
-    mkdir -pv dist/libft
-    rsync -av --exclude='*' --include-from='.dist-include' libft/ dist/libft
-    rm -rfv dist/libft/README.md
-    @echo "Copying src files for ft_printf"
-    mkdir -pv dist/src
-    rsync -av --exclude='*' --include-from='.dist-include' src/ dist/src
-    @echo "Copying Makefile and README for ft_printf"
-    rsync -av --exclude='*' --include-from='.dist-include' . dist/ 
+_done name="":
+    @if [ -n "{{name}}" ]; then printf "{{bold}}{{green}}=== done: {{name}} ===\n{{reset}}\n"; else printf "{{bold}}{{green}}=== done ===\n{{reset}}\n"; fi
+
+build-project:
+    @just _header "build-project"
+    @just _step "building"
+    make
+    @just _done
+
+build-release:
+    @just _header "build-release"
+    @just _step "removing previous dist build"
+    rm -rfv dist/
+    @just _step "building dist"
+    just build-dist
+    @just _step "compressing to {{release-tar-gz}}"
+    tar -czvf {{release-tar-gz}} -C dist/ {{release-name}}/
+    @echo "to create a release, run:"
+    @echo "gh release create v1.0.0 --fail-on-no-commits dist/*.tar.gz"
+    @just _done "{{release-tar-gz}}"
+
+build-dist:
+    @just _header "build-dist"
+    @just _step "copying files to dist/"
+    rsync -av --mkpath --include-from='.dist-include' --exclude='*' . dist/{{release-name}}/
+    @just _done
 
 fclean:
-    make -f libft/Makefile fclean
-    rm -rf libft/
-    rm -rf obj/
-    rm -rf bin/
+    @just _header "fclean"
+    @just _step "running make fclean"
+    make fclean
+    @just _step "removing dist/ and release archive"
+    rm -rfv dist/
+    rm -rfv {{release-tar-gz}}
+    @just _done
 
-fre dep-args="" pf-args="":
-    fclean
-    build-full {{dep-args}} {{pf-args}}
+re:
+    @just _header "re"
+    just fclean
+    @just _step "building"
+    make
+    just build-dist
+    @just _done "re"
