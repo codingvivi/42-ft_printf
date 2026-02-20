@@ -2,81 +2,133 @@ _This project has been created as part of the 42 curriculum by lrain_
 
 # 42-ft_printf
 ## Description
-*to write*
+`ft_printf` is a partial reimplementation of the C standard library's `printf`.
+It parses a format string and consumes variadic arguments to produce formatted output on stdout,
+returning the total number of characters written.
+
+Supported conversions:
+
+| Specifier | Output                              |
+|-----------|-------------------------------------|
+| `%c`      | Single character                    |
+| `%s`      | String (`(null)` if pointer is NULL)|
+| `%p`      | Pointer address as `0x...` hex      |
+| `%d`, `%i`| Signed decimal integer              |
+| `%u`      | Unsigned decimal integer            |
+| `%x`      | Unsigned hexadecimal (lowercase)    |
+| `%X`      | Unsigned hexadecimal (uppercase)    |
+| `%%`      | Literal `%`                         |
 
 ## Instructions
 ### Building
-
-If cloned from my GitHub,
-this project has premake as an optional dependency,
-which will generate makefiles automatically.
-
-Once installed,
-run
+Download the latest release archive from the [releases page](https://github.com/codingvivi/42-ft_printf/releases),
+then:
 ```bash
-    git clone https://github.com/codingvivi/42-ft_printf
-    cd 42-ft_printf/
-    git submodule update --init --recursive
-    premake5 gmake # to generate make file
-    premake5 ecc # optionally to generate record of compile flags for linting
+tar -xzvf lrain-42-ft_printf.tar.gz
+cd lrain-42-ft_printf/
+make
+```
+Run `make [target]`. Available targets:
+
+| Target   | Description                          |
+|----------|--------------------------------------|
+| `all`    | Build `libftprintf.a` (default)      |
+| `clean`  | Remove object files                  |
+| `fclean` | Remove object files and the library  |
+| `re`     | Full rebuild (`fclean` + `all`)      |
+
+### Developing
+While this is relevant for pretty much me only,
+since I am the sole person wanting to create a distributable
+(read one conforming to the the 42 turnin requirements)
+version of this source code,
+the buildchain for doing so requires:
+- [rsync](https://rsync.samba.org/) (if it's not already preinstalled on the machine)
+- [just](https://github.com/casey/just) (could have stuck everything into a makefile, but `just` is easier to work with and was already installed on my machine anyway. Non of it's contents is trailblazing stuff, the individual commands it calls can be run manually as well)
+
+If installed, run `just [recipe]`. Available recipes:
+
+| Recipe          | Description                                                              |
+|-----------------|--------------------------------------------------------------------------|
+| `build-project` | Runs `make` to build the library (default)                               |
+| `build-dist`    | Syncs the distributable files into `dist/` via rsync                     |
+| `build-release` | Cleans `dist/`, runs `build-dist`, then compresses the result into a `.tar.gz` |
+| `fclean`        | Runs `make fclean` and removes `dist/` and the release archive           |
+| `re`            | Runs `fclean`, rebuilds the library, then runs `build-dist`              |
+
+## Algorithm
+### Format string parsing
+`ft_printf` scans the format string linearly,
+one character at a time.
+Non-`%` characters are written directly to stdout with `write(2)`.
+When a `%` is encountered,
+the next character is read as the conversion specifier
+and dispatched to the appropriate handler via an if-else chain.
+All handlers return the number of bytes written,
+which is accumulated into the return value.
+
+### Helper functions
+All of the relevant functions
+originally were from the [libft](https://github.com/codingvivi/42_libft) project.
+They were modified to allow for returning the write count.
+Additionally, the putnbr function has been expanded
+to be able to deal with different numeral systems.
+It's file now contains a function for unsigneds as well.
+#### Number to string conversion
+All numeric conversions funnel through two functions.
+`ft_pf_putnbr_base_fd` (signed) handles only what is unique to signed integers:
+writing the `-` sign if negative and reinterpreting the value as unsigned,
+then delegating to `ft_pf_putnbru_base_fd`.
+`ft_pf_putnbru_base_fd` (unsigned) handles all other cases,
+including `%u`, `%x`, `%X`, and `%p`.
+It takes a `uint64_t` rather than `unsigned int` because it also serves `%p`,
+and pointers on 64-bit systems are 64 bits wide — wider than `unsigned int` (typically 32 bits).
+Using `uint64_t` means a single function covers both without truncating pointer values.
+
+The underlying `itoa_fwd_fd` avoids the conventional approach of building the digit string
+in reverse and then reversing it or using a stack.
+Instead it writes digits directly left-to-right by first finding the highest place value
+— the largest power of the base that fits into the number —
+then extracting each digit from most significant to least:
+
+```
+place_val = highest power of base ≤ nb
+while nb != 0:
+    write digit at nb / place_val
+    nb = nb % place_val
+    place_val /= base
+write any remaining trailing zeros
 ```
 
-Once generated with premake,
-the compile options are:
-```
+For example, `1234` in base 10: place value starts at `1000`, yielding `1`, `2`, `3`, `4` in one pass with no buffer.
 
-```
-
-- **Configurations**:
-    - *to write*
-- **Platforms**:
-    - `Dev`: Configured for my machine, which is ARM64 linux.
-    - `42`: Configured for the 42 school environment, targeting x86_64 architecture on Linux.
-
-- **Projects**:
-    - `42-ft_printf`
-
-With no arguments supplied,
-running `make` will build library and runner
-in the release_dev configuration.
-
-### Reference folder
-The `reference/` folder contains my notes and their renderings:
-- *to write*
+The base is defined by a `base_digits` string (e.g. `"0123456789abcdef"`),
+whose length determines the base and each index maps to its character.
+This is what allows `%d`, `%u`, `%x`, `%X`, and `%p` to all share the same conversion code,
+as mentioned above.
 
 ## Resources
 ### References
-[1] D. Lemire, "Appending to an std::string character-by-character: how does the capacity grow?," *Daniel Lemire's blog*. Accessed: Feb. 12, 2026. [Online]. Available: https://lemire.me/blog/2023/10/23/appending-to-an-stdstring-character-by-character-how-does-the-capacity-grow/
+## References
 
-[2] "Computer data storage," *Wikipedia*. Feb. 12, 2026. Accessed: Feb. 12, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Computer_data_storage&oldid=1337916484#Primary
+[1] "Fixed width integer types (since C99)," *cppreference.com*. Accessed: Feb. 20, 2026. [Online]. Available: https://en.cppreference.com/w/c/types/integer.html
 
-[3] "Computer memory," *Wikipedia*. Feb. 01, 2026. Accessed: Feb. 12, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Computer_memory&oldid=1335951825
+[2] R. Felker, *musl libc*. (Feb. 29, 2024). C. Accessed: Feb. 12, 2026. [Online]. Available: https://git.musl-libc.org/cgit/musl/tag/?h=v1.2.5
 
-[4] "folly/folly/docs/FBVector.md at main · facebook/folly," *GitHub*. Accessed: Feb. 12, 2026. [Online]. Available: https://github.com/facebook/folly/blob/main/folly/docs/FBVector.md
+[3] "va_arg," *cppreference.com*. Accessed: Feb. 20, 2026. [Online]. Available: https://en.cppreference.com/w/c/variadic/va_arg.html
 
-[5] "Fragmentation (computing)," *Wikipedia*. Apr. 21, 2025. Accessed: Feb. 12, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Fragmentation_(computing)&oldid=1286753577#Types
+[4] "va_end," *cppreference.com*. Accessed: Feb. 20, 2026. [Online]. Available: https://en.cppreference.com/w/c/variadic/va_end.html
 
-[6] F. Domingues and P. Singh, *francinette*. (Feb. 05, 2026). C. Accessed: Feb. 12, 2026. [Online]. Available: https://github.com/Prashant-Bharaj/francinette
+[5] "va_start," *cppreference.com*. Accessed: Feb. 18, 2026. [Online]. Available: https://en.cppreference.com/w/c/variadic/va_start.html
 
-[7] Kay Lack, *In search of the perfect dynamic array growth factor*, (Jan. 24, 2025). Accessed: Feb. 14, 2026. [Online Video]. Available: https://www.youtube.com/watch?v=GZPqDvG615k
+[6] "Variadic arguments," *cppreference.com*. Accessed: Feb. 18, 2026. [Online]. Available: https://en.cppreference.com/w/c/language/variadic.html
 
-[8] R. Felker, *musl libc*. (Feb. 29, 2024). C. Accessed: Feb. 12, 2026. [Online]. Available: https://git.musl-libc.org/cgit/musl/tag/?h=v1.2.5
-
-[9] 262588213843476, "Optimal memory reallocation and the golden ratio," *Gist*. Accessed: Feb. 12, 2026. [Online]. Available: https://gist.github.com/jemmanuel/b8277e7922e9b9947e2f171cc85f1d01
-
-[10] sarahmarienothling, "Optimising the growth factor of a dynamic Array List," *Sarah-Marie Nothling*. Accessed: Feb. 12, 2026. [Online]. Available: https://sarahnothling.wordpress.com/2015/06/04/optimising-the-growth-factor-of-a-dynamic-array-list/
-
-[11] BitLemon, *Page Tables and MMU: How Virtual Memory Actually Works Behind the Scenes (Animation)*, (Mar. 03, 2025). Accessed: Feb. 12, 2026. [Online Video]. Available: https://www.youtube.com/watch?v=B6tJxvYBNrU
-
-[12] M. Bystrin, *premake-ecc*. (Feb. 04, 2026). Lua. Accessed: Feb. 12, 2026. [Online]. Available: https://github.com/MattBystrin/premake-ecc
-
-[13] *premake/premake-core*. (Feb. 12, 2026). C. Premake. Accessed: Feb. 12, 2026. [Online]. Available: https://github.com/premake/premake-core
-
-[14] "Random-access memory," *Wikipedia*. Jan. 30, 2026. Accessed: Feb. 14, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Random-access_memory&oldid=1335683491
-
-[15] BitLemon, *Virtual Memory Explained (including Paging)*, (Feb. 06, 2025). Accessed: Feb. 12, 2026. [Online Video]. Available: https://www.youtube.com/watch?v=fGP6VHxqkIM
+[7] "Variadic functions," *cppreference.com*. Accessed: Feb. 15, 2026. [Online]. Available: https://en.cppreference.com/w/c/variadic.html
 
 ### AI usage
-Claude Opus 4.6 was used
-to:
-- *to write*
+Claude Opus 4.6
+was used for gruntwork, like:
+- refactoring (e.g. update argument structures of functions accross files)
+- updating printouts for my justfile to make it more readable
+- Edit/correct sections of the readme 
+- Convert Zoteros reference formatting to markdown

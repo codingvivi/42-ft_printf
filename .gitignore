@@ -1,14 +1,18 @@
-# Build
+# Autogen
+## helpers
+.copier-answers.yml
+compile_commands.json
+## build
 .cache/
 bin/
 obj/
-Makefile
-*.make
-.copier-answers.yml
-compile_commands.json
-
-# log
+dist/
+*.o
+*.a
+*.tar.gz
+## log
 *.log
 vgcore.*
 
+# not mine to push
 ext/ref

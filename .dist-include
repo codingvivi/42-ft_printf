@@ -1,7 +1,5 @@
-*.c
-*.c
-*.h
-*.h
+src/
+src/*.c
+src/*.h
 Makefile
-*.make
 README.md
