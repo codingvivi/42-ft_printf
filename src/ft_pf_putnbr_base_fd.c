@@ -6,7 +6,7 @@
 /*   By: lrain <lrain@students.42berlin.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 03:40:15 by lrain             #+#    #+#             */
-/*   Updated: 2026/02/19 18:33:42 by lrain            ###   ########.fr       */
+/*   Updated: 2026/02/20 17:16:31 by lrain            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,14 @@
 #include <unistd.h>
 
 static int	itoa_fwd_fd(uint64_t nb, int fd, char *b_digi, unsigned int base);
+int			ft_pf_putnbru_base_fd(uint64_t nb, int fd, char *base_digits);
 
 int	ft_pf_putnbr_base_fd(int nb, char *base_digits, int fd)
 {
 	unsigned int	nb_u;
-	unsigned int	b_len;
 	int				count;
 
 	count = 0;
-	b_len = 0;
-	while (base_digits[b_len])
-		b_len++;
 	if (nb < 0)
 	{
 		count += write(fd, "-", 1);
@@ -32,10 +29,7 @@ int	ft_pf_putnbr_base_fd(int nb, char *base_digits, int fd)
 	}
 	else
 		nb_u = (unsigned int)nb;
-	if (nb_u < b_len)
-		count += write(fd, &base_digits[nb_u], 1);
-	else
-		count += itoa_fwd_fd(nb_u, fd, base_digits, b_len);
+	count += ft_pf_putnbru_base_fd(nb_u, fd, base_digits);
 	return (count);
 }
 
