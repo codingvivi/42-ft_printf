@@ -107,6 +107,21 @@ as mentioned above.
 
 ## Resources
 ### References
+## References
+
+[1] "Fixed width integer types (since C99)," *cppreference.com*. Accessed: Feb. 20, 2026. [Online]. Available: https://en.cppreference.com/w/c/types/integer.html
+
+[2] R. Felker, *musl libc*. (Feb. 29, 2024). C. Accessed: Feb. 12, 2026. [Online]. Available: https://git.musl-libc.org/cgit/musl/tag/?h=v1.2.5
+
+[3] "va_arg," *cppreference.com*. Accessed: Feb. 20, 2026. [Online]. Available: https://en.cppreference.com/w/c/variadic/va_arg.html
+
+[4] "va_end," *cppreference.com*. Accessed: Feb. 20, 2026. [Online]. Available: https://en.cppreference.com/w/c/variadic/va_end.html
+
+[5] "va_start," *cppreference.com*. Accessed: Feb. 18, 2026. [Online]. Available: https://en.cppreference.com/w/c/variadic/va_start.html
+
+[6] "Variadic arguments," *cppreference.com*. Accessed: Feb. 18, 2026. [Online]. Available: https://en.cppreference.com/w/c/language/variadic.html
+
+[7] "Variadic functions," *cppreference.com*. Accessed: Feb. 15, 2026. [Online]. Available: https://en.cppreference.com/w/c/variadic.html
 
 ### AI usage
 Claude Opus 4.6
@@ -114,3 +129,4 @@ was used for gruntwork, like:
 - refactoring (e.g. update argument structures of functions accross files)
 - updating printouts for my justfile to make it more readable
 - Edit/correct sections of the readme 
+- Convert Zoteros reference formatting to markdown
