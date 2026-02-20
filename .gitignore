@@ -6,11 +6,10 @@ compile_commands.json
 .cache/
 bin/
 obj/
-libft/
-Makefile
-*.make
+dist/
 *.o
 *.a
+*.tar.gz
 ## log
 *.log
 vgcore.*
