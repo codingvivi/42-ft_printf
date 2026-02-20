@@ -109,7 +109,6 @@ as mentioned above.
 
 ## Resources
 ### References
-## References
 
 [1] "Fixed width integer types (since C99)," *cppreference.com*. Accessed: Feb. 20, 2026. [Online]. Available: https://en.cppreference.com/w/c/types/integer.html
 
