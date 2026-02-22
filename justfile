@@ -40,6 +40,22 @@ build-dist:
     rsync -av --mkpath --include-from='.dist-include' --exclude='*' . dist/{{release-name}}/
     @just _done
 
+test:
+    @just _header "build & run test"
+    @just _step "build test"
+    make test
+    @just _step "run test"
+    ./test/runner.out
+    @just _done "test"
+
+retest:
+    @just _header "rebuild & test"
+    @just _step "rebuild"
+    just re
+    @just _step "test"
+    just test
+    @just _done "retest"
+
 fclean:
     @just _header "fclean"
     @just _step "running make fclean"
@@ -56,3 +72,11 @@ re:
     make
     just build-dist
     @just _done "re"
+
+cc-db:
+    @just _header "cc-db"
+    @just _step "capturing library build"
+    bear -- make re
+    @just _step "capturing test build"
+    bear --append -- make test
+    @just _done "compile_commands.json"

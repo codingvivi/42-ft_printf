@@ -6,13 +6,13 @@
 /*   By: lrain <lrain@students.42berlin.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 05:14:10 by lrain             #+#    #+#             */
-/*   Updated: 2026/02/20 18:27:39 by lrain            ###   ########.fr       */
+/*   Updated: 2026/02/22 15:27:40 by lrain            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_pf_internal.h"
 #include <stdarg.h>
 #include <unistd.h>
-#include "ft_pf_internal.h"
 
 static int	printf_write(char c, va_list *ap);
 
@@ -21,6 +21,8 @@ int	ft_printf(const char *str, ...)
 	va_list	ap;
 	int		count;
 
+	if (!str)
+		return (-1);
 	va_start(ap, str);
 	count = 0;
 	while (*str)

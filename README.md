@@ -12,12 +12,14 @@ Supported conversions:
 |-----------|-------------------------------------|
 | `%c`      | Single character                    |
 | `%s`      | String (`(null)` if pointer is NULL)|
-| `%p`      | Pointer address as `0x...` hex      |
+| `%p`      | Pointer address as `0x...` hex (`(nil)` if pointer is NULL) |
 | `%d`, `%i`| Signed decimal integer              |
 | `%u`      | Unsigned decimal integer            |
 | `%x`      | Unsigned hexadecimal (lowercase)    |
 | `%X`      | Unsigned hexadecimal (uppercase)    |
 | `%%`      | Literal `%`                         |
+
+If the format string itself is `NULL`, `ft_printf` returns `-1` and writes nothing.
 
 ## Instructions
 ### Building
@@ -36,13 +38,14 @@ Run `make [target]`. Available targets:
 | `clean`  | Remove object files                  |
 | `fclean` | Remove object files and the library  |
 | `re`     | Full rebuild (`fclean` + `all`)      |
+| `test`   | Build and link the test runner       |
 
 ### Developing
 While this is relevant for pretty much me only,
 since I am the sole person wanting to create a distributable
-(read one conforming to the the 42 turnin requirements)
+(read: one conforming to the the 42 turnin requirements)
 version of this source code,
-the buildchain for doing so requires:
+the build/testchain for doing so requires:
 - [rsync](https://rsync.samba.org/) (if it's not already preinstalled on the machine)
 - [just](https://github.com/casey/just) (could have stuck everything into a makefile, but `just` is easier to work with and was already installed on my machine anyway. Non of it's contents is trailblazing stuff, the individual commands it calls can be run manually as well)
 
@@ -55,6 +58,9 @@ If installed, run `just [recipe]`. Available recipes:
 | `build-release` | Cleans `dist/`, runs `build-dist`, then compresses the result into a `.tar.gz` |
 | `fclean`        | Runs `make fclean` and removes `dist/` and the release archive           |
 | `re`            | Runs `fclean`, rebuilds the library, then runs `build-dist`              |
+| `test`          | Builds the test runner and executes it                                   |
+| `retest`        | Runs `re`, builds the test runner, and executes it                       |
+| `cc-db`         | Generates `compile_commands.json` via `bear` (for clangd/LSP)            |
 
 ## Algorithm
 ### Format string parsing
