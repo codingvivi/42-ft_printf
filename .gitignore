@@ -9,6 +9,7 @@ obj/
 dist/
 *.o
 *.a
+*.out
 *.tar.gz
 ## log
 *.log
