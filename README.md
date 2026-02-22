@@ -47,7 +47,7 @@ since I am the sole person wanting to create a distributable
 version of this source code,
 the build/testchain for doing so requires:
 - [rsync](https://rsync.samba.org/) (if it's not already preinstalled on the machine)
-- [just](https://github.com/casey/just) (could have stuck everything into a makefile, but `just` is easier to work with and was already installed on my machine anyway. Non of it's contents is trailblazing stuff, the individual commands it calls can be run manually as well)
+- [just](https://github.com/casey/just) (For orchestration, could have stuck everything into a makefile, but `just` is faster to work with and was already installed on my machine anyway. Non of the justfile's contents is trailblazing stuff, the individual commands it calls can be run manually as well)
 - optional:[bear](https://github.com/rizsotto/Bear) (for clangd/LSP linting)
 
 If installed, run `just [recipe]`. Available recipes:
