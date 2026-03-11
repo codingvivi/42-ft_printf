@@ -1,70 +1,82 @@
 _This project has been created as part of the 42 curriculum by lrain_
 
 # 42-ft_printf
+
+[](./printing.jpg)
+
 ## Description
+
 `ft_printf` is a partial reimplementation of the C standard library's `printf`.
 It parses a format string and consumes variadic arguments to produce formatted output on stdout,
 returning the total number of characters written.
 
 Supported conversions:
 
-| Specifier | Output                              |
+| Specifier | Output |
 |-----------|-------------------------------------|
-| `%c`      | Single character                    |
-| `%s`      | String (`(null)` if pointer is NULL)|
-| `%p`      | Pointer address as `0x...` hex (`(nil)` if pointer is NULL) |
-| `%d`, `%i`| Signed decimal integer              |
-| `%u`      | Unsigned decimal integer            |
-| `%x`      | Unsigned hexadecimal (lowercase)    |
-| `%X`      | Unsigned hexadecimal (uppercase)    |
-| `%%`      | Literal `%`                         |
+| `%c` | Single character |
+| `%s` | String (`(null)` if pointer is NULL)|
+| `%p` | Pointer address as `0x...` hex (`(nil)` if pointer is NULL) |
+| `%d`, `%i`| Signed decimal integer |
+| `%u` | Unsigned decimal integer |
+| `%x` | Unsigned hexadecimal (lowercase) |
+| `%X` | Unsigned hexadecimal (uppercase) |
+| `%%` | Literal `%` |
 
 If the format string itself is `NULL`, `ft_printf` returns `-1` and writes nothing.
 
 ## Instructions
+
 ### Building
+
 Download the latest release archive from the [releases page](https://github.com/codingvivi/42-ft_printf/releases),
 then:
+
 ```bash
 tar -xzvf lrain-42-ft_printf.tar.gz
 cd lrain-42-ft_printf/
 make
 ```
+
 Run `make [target]`. Available targets:
 
-| Target   | Description                          |
+| Target | Description |
 |----------|--------------------------------------|
-| `all`    | Build `libftprintf.a` (default)      |
-| `clean`  | Remove object files                  |
-| `fclean` | Remove object files and the library  |
-| `re`     | Full rebuild (`fclean` + `all`)      |
-| `test`   | Build and link the test runner       |
+| `all` | Build `libftprintf.a` (default) |
+| `clean` | Remove object files |
+| `fclean` | Remove object files and the library |
+| `re` | Full rebuild (`fclean` + `all`) |
+| `test` | Build and link the test runner |
 
 ### Developing
+
 While this is relevant for pretty much me only,
 since I am the sole person wanting to create a distributable
 (read: one conforming to the the 42 turnin requirements)
 version of this source code,
 the build/testchain for doing so requires:
+
 - [rsync](https://rsync.samba.org/) (if it's not already preinstalled on the machine)
 - [just](https://github.com/casey/just) (For orchestration, could have stuck everything into a makefile, but `just` is faster to work with and was already installed on my machine anyway. Non of the justfile's contents is trailblazing stuff, the individual commands it calls can be run manually as well)
 - optional:[bear](https://github.com/rizsotto/Bear) (for clangd/LSP linting)
 
 If installed, run `just [recipe]`. Available recipes:
 
-| Recipe          | Description                                                              |
+| Recipe | Description |
 |-----------------|--------------------------------------------------------------------------|
-| `build-project` | Runs `make` to build the library (default)                               |
-| `build-dist`    | Syncs the distributable files into `dist/` via rsync                     |
+| `build-project` | Runs `make` to build the library (default) |
+| `build-dist` | Syncs the distributable files into `dist/` via rsync |
 | `build-release` | Cleans `dist/`, runs `build-dist`, then compresses the result into a `.tar.gz` |
-| `fclean`        | Runs `make fclean` and removes `dist/` and the release archive           |
-| `re`            | Runs `fclean`, rebuilds the library, then runs `build-dist`              |
-| `test`          | Builds the test runner and executes it                                   |
-| `retest`        | Runs `re`, builds the test runner, and executes it                       |
-| `cc-db`         | Generates `compile_commands.json` via `bear` (for clangd/LSP)            |
+| `fclean` | Runs `make fclean` and removes `dist/` and the release archive |
+| `re` | Runs `fclean`, rebuilds the library, then runs `build-dist` |
+| `test` | Builds the test runner and executes it |
+| `retest` | Runs `re`, builds the test runner, and executes it |
+| `cc-db` | Generates `compile_commands.json` via `bear` (for clangd/LSP) |
 
 ## Algorithm
+
 ### Format string parsing
+
 `ft_printf` scans the format string linearly,
 one character at a time.
 Non-`%` characters are written directly to stdout with `write(2)`.
@@ -75,13 +87,16 @@ All handlers return the number of bytes written,
 which is accumulated into the return value.
 
 ### Helper functions
+
 All of the relevant functions
 originally were from the [libft](https://github.com/codingvivi/42_libft) project.
 They were modified to allow for returning the write count.
 Additionally, the putnbr function has been expanded
 to be able to deal with different numeral systems.
 It's file now contains a function for unsigneds as well.
+
 #### Number to string conversion
+
 All numeric conversions funnel through two functions.
 `ft_pf_putnbr_base_fd` (signed) handles only what is unique to signed integers:
 writing the `-` sign if negative and reinterpreting the value as unsigned,
@@ -115,6 +130,7 @@ This is what allows `%d`, `%u`, `%x`, `%X`, and `%p` to all share the same conve
 as mentioned above.
 
 ## Resources
+
 ### References
 
 [1] "Fixed width integer types (since C99)," *cppreference.com*. Accessed: Feb. 20, 2026. [Online]. Available: https://en.cppreference.com/w/c/types/integer.html
@@ -132,9 +148,11 @@ as mentioned above.
 [7] "Variadic functions," *cppreference.com*. Accessed: Feb. 15, 2026. [Online]. Available: https://en.cppreference.com/w/c/variadic.html
 
 ### AI usage
+
 Claude Opus 4.6
 was used for gruntwork, like:
+
 - refactoring (e.g. update argument structures of functions accross files)
 - updating printouts for my justfile to make it more readable
-- Edit/correct sections of the readme 
+- Edit/correct sections of the readme
 - Convert Zoteros reference formatting to markdown
