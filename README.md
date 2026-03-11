@@ -2,7 +2,7 @@ _This project has been created as part of the 42 curriculum by lrain_
 
 # 42-ft_printf
 
-[](./printing.jpg)
+![](./printing.jpg)
 
 ## Description
 
